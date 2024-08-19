@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-4 custom-container">
     <h1 class="text-center mb-4 custom-title">Editar Empleado</h1>
-    <form @submit.prevent="submitForm" v-if="form">
+    <form @submit.prevent="submitForm">
 
       <div class="form-group">
         <label for="id">ID:</label>
@@ -28,14 +28,14 @@
       </div>
 
       <div class="form-group">
-        <label for="telefono">Telefono:</label>
-        <input type="tel" id="telefono" v-model="form.telefono" class="form-control" :class="{ 'is-invalid': errors.telefono }" placeholder="Ingrese el telefono" />
+        <label for="telefono">Teléfono:</label>
+        <input type="tel" id="telefono" v-model="form.telefono" class="form-control" :class="{ 'is-invalid': errors.telefono }" placeholder="Ingrese el teléfono" />
         <div v-if="errors.telefono" class="invalid-feedback">{{ errors.telefono }}</div>
       </div>
 
       <div class="form-group">
-        <label for="fecha_contratacion">Fecha de contratacion:</label>
-        <input type="date" id="fecha_contratacion" v-model="form.fecha_contratacion" class="form-control" :class="{ 'is-invalid': errors.fecha_contratacion }" placeholder="Ingrese la fecha de contratacion" />
+        <label for="fecha_contratacion">Fecha de contratación:</label>
+        <input type="date" id="fecha_contratacion" v-model="form.fecha_contratacion" class="form-control" :class="{ 'is-invalid': errors.fecha_contratacion }" placeholder="Ingrese la fecha de contratación" />
         <div v-if="errors.fecha_contratacion" class="invalid-feedback">{{ errors.fecha_contratacion }}</div>
       </div>
 
@@ -48,65 +48,56 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters } from 'vuex';
+import axios from 'axios';
 
 export default {
   name: 'EmpleadoEdit',
   props: ['item'],
   data() {
     return {
-      errors: {}
+      errors: {},
+      form: { ...this.item }
     };
   },
   methods: {
-    ...mapActions(['increment']),
     validateForm() {
       this.errors = {};
 
       if (!this.form.id) this.errors.id = 'El ID es obligatorio.';
       if (!this.form.dni) this.errors.dni = 'El DNI es obligatorio.';
       if (!this.form.nombre) this.errors.nombre = 'El nombre es obligatorio.';
+      if (!this.form.correo) this.errors.correo = 'El correo es obligatorio.';
+      if (!this.form.telefono) this.errors.telefono = 'El teléfono es obligatorio.';
+      if (!this.form.fecha_contratacion) this.errors.fecha_contratacion = 'La fecha de contratación es obligatoria.';
 
       return Object.keys(this.errors).length === 0;
     },
-
     submitForm() {
       if (this.validateForm()) {
         this.save();
-        this.form = {
-          id: '',
-          dni: '',
-          nombre: '',
-        };
       }
     },
     save() {
-      const vm = this;
-      this.axios.patch(this.baseUrl + "/hoteles/" + this.item.id, this.form)
-        .then(function (response) {
-          if (response.status == '200') {
-            vm.$emit('on-update', response.data);
+      axios.patch(`${this.baseUrl}/empleados/${this.form.id}`, this.form)
+        .then(response => {
+          if (response.status === 200) {
+            this.$emit('handle-update', response.data);
           }
-          vm.itemList = response.data;
         })
-        .catch(function (error) {
-          console.error(error);
+        .catch(error => {
+          console.error('Error al actualizar el empleado:', error);
         });
-    },
+    }
   },
   computed: {
     ...mapState(['count']),
     ...mapGetters(['doubleCount', 'getBaseUrl']),
     baseUrl() {
-      return this.getBaseUrl
-    },
-    form() {
-      return Object.assign({}, this.item);
+      return this.getBaseUrl;
     }
-  },
-  mounted() {
   }
-}
+};
 </script>
 
 <style scoped>

@@ -36,17 +36,13 @@
 
 <script>
 import axios from 'axios';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'HotelNew',
   data() {
     return {
-      form: {
-        id: '',
-        nombre: '',
-        direccion: '',
-        num_habitaciones: ''
-      },
+      form: { ...this.item },
       errors: {}
     };
   },
@@ -67,14 +63,16 @@ export default {
       }
     },
     save() {
-      axios.post('/api/hoteles', this.form)
+      axios.post(`${this.baseUrl}/hoteles`, this.form)
         .then(response => {
           if (response.status === 201) {
             this.$emit('on-register', response.data);
             this.resetForm();
           }
         })
-        .catch(error => console.error(error));
+        .catch(error => {
+          console.error(error);
+        });
     },
     resetForm() {
       this.form = {
@@ -84,6 +82,13 @@ export default {
         num_habitaciones: ''
       };
       this.errors = {};
+    }
+  },
+  computed: {
+    ...mapState(['count']),
+    ...mapGetters(['doubleCount', 'getBaseUrl']),
+    baseUrl() {
+      return this.getBaseUrl;
     }
   }
 };

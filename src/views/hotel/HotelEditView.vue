@@ -36,18 +36,19 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import axios from 'axios';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'HotelEdit',
   props: ['item'],
   data() {
     return {
-      errors: {}
+      errors: {},
+      form: { ...this.item }
     };
   },
   methods: {
-    ...mapActions(['increment']),
     validateForm() {
       this.errors = {};
 
@@ -62,24 +63,16 @@ export default {
     submitForm() {
       if (this.validateForm()) {
         this.save();
-        this.form = {
-          id: '',
-          nombre: '',
-          direccion: '',
-          num_habitaciones: ''
-        };
       }
     },
     save() {
-      const vm = this;
-      this.axios.patch(this.baseUrl + "/hoteles/" + this.item.id, this.form)
-        .then(function (response) {
-          if (response.status == '200') {
-            vm.$emit('on-update', response.data);
+      axios.patch(`${this.baseUrl}/hoteles/${this.form.id}`, this.form)
+        .then(response => {
+          if (response.status === 200) {
+            this.$emit('on-update', response.data);
           }
-          vm.itemList = response.data;
         })
-        .catch(function (error) {
+        .catch(error => {
           console.error(error);
         });
     },
@@ -88,17 +81,12 @@ export default {
     ...mapState(['count']),
     ...mapGetters(['doubleCount', 'getBaseUrl']),
     baseUrl() {
-      return this.getBaseUrl
-    },
-    form() {
-      return Object.assign({}, this.item);
+      return this.getBaseUrl;
     }
-  },
-  mounted() {
   }
-}
+};
 </script>
 
 <style scoped>
-
+/* Puedes añadir estilos aquí si es necesario */
 </style>
