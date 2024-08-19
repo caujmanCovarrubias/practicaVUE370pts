@@ -89,9 +89,17 @@ export default {
       this.showModalEdit = true;
     },
     onSearch() {
-      // Implementar la lógica de búsqueda aquí si es necesario
-      this.getList();
-    },
+  if (this.textToSearch.trim() === '') {
+    // Si el campo de búsqueda está vacío, recargamos toda la lista
+    this.getList();
+  } else {
+    // Filtramos la lista actual de elementos según el texto de búsqueda
+    this.itemList = this.itemList.filter(hotel => 
+      hotel.nombre.toLowerCase().includes(this.textToSearch.toLowerCase()) || 
+      hotel.direccion.toLowerCase().includes(this.textToSearch.toLowerCase())
+    );
+  }
+  },
     onDelete(item) {
       if (confirm("¿Está seguro de que desea eliminar este registro? Esta acción no se puede deshacer.")) {
         axios.delete(`${this.baseUrl}/hoteles/${item.id}`)
