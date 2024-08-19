@@ -2,11 +2,10 @@
 
   <Menu>
     <router-link to="/">Home</router-link> 
-    <router-link to="/about">About</router-link>
-    <router-link to="/mascota">Mascotas</router-link>
     <router-link to="/hotel">Hoteles</router-link>
     <router-link to="/empleado">Empleados</router-link>
     <router-link to="/habitacion">Habitacion</router-link>
+    <router-link to="/about">About</router-link>
   </Menu>
   <router-view/>
 </template>
