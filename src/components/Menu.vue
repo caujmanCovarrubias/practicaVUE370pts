@@ -1,0 +1,70 @@
+<template>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="menu navbar-nav me-auto mb-2 mb-lg-0">
+            <slot></slot>
+          </ul>
+        <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+        </div>
+      </div>
+    </nav>
+  </template>
+  
+<script>
+export default {
+    name: 'Menu',
+    computed: {
+    },
+    methods: {
+    }
+}
+</script>
+  
+<style >
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 10px 20px;
+    color: white;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 14px 20px;
+    display: block;
+}
+
+.navbar a:hover {
+    background-color: #575757;
+    border-radius: 4px;
+}
+
+.navbar .logo {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.navbar .menu {
+    display: flex;
+    padding-right: 20px;
+}
+
+.navbar .menu-item {
+    margin-left: 10px;
+}
+
+</style>
+  
